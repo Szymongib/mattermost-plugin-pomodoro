@@ -1,4 +1,4 @@
-package main
+package plugin
 
 import (
 	"reflect"
@@ -25,6 +25,13 @@ type configuration struct {
 func (c *configuration) Clone() *configuration {
 	var clone = *c
 	return &clone
+}
+
+// IsValid checks if all needed fields are set.
+func (c *configuration) IsValid() error {
+	// TODO: config checks
+
+	return nil
 }
 
 // getConfiguration retrieves the active configuration under lock, making it safe to use
@@ -78,6 +85,16 @@ func (p *Plugin) OnConfigurationChange() error {
 	}
 
 	p.setConfiguration(configuration)
+
+	cmd, err := p.getCommand(configuration)
+	if err != nil {
+		return errors.Wrap(err, "failed to get command")
+	}
+
+	err = p.API.RegisterCommand(cmd)
+	if err != nil {
+		return errors.Wrap(err, "failed to register command")
+	}
 
 	return nil
 }

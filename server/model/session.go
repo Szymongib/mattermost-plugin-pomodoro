@@ -10,6 +10,6 @@ type Session struct {
 	StartTime int64  `json:"startTime"`
 	Length    int64  `json:"length"`
 
-	//EndTime int64 // TODO: consider if breaks are allowed or not
+	// TODO: consider if breaks are allowed or not
 	// TODO: other elements like Task, Category etc
 }

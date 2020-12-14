@@ -3,9 +3,10 @@ package plugin
 import (
 	"container/heap"
 	"context"
+	"time"
+
 	"github.com/mattermost/mattermost-plugin-pomodoro/server/model"
 	"github.com/pkg/errors"
-	"time"
 )
 
 var tickTime = 5 * time.Second
@@ -65,7 +66,6 @@ func (p *Plugin) worker(ctx context.Context, sessionChan <-chan *model.Session, 
 				p.API.LogError("Failed to process session, requeuing", "error", err)
 				waitChan <- &delayedSession{session: session, readyAt: time.Now().Unix() + 1} // Add one second delay if error occurred
 			} else if !done {
-				//p.API.LogDebug("Session not finished, requeuing")
 				waitChan <- &delayedSession{session: session, readyAt: session.StartTime + session.Length}
 			}
 

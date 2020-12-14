@@ -2,12 +2,13 @@ package plugin
 
 import (
 	"fmt"
-	model2 "github.com/mattermost/mattermost-plugin-pomodoro/server/model"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/plugin"
 	"strconv"
 	"strings"
 	"time"
+
+	model2 "github.com/mattermost/mattermost-plugin-pomodoro/server/model"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/plugin"
 )
 
 var (

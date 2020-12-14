@@ -2,11 +2,12 @@ package plugin
 
 import (
 	"fmt"
+	"net/http"
+	"sync"
+
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/plugin"
 	"github.com/pkg/errors"
-	"net/http"
-	"sync"
 )
 
 // TODO: tests

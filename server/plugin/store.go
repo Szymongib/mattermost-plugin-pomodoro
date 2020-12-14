@@ -3,6 +3,7 @@ package plugin
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/mattermost/mattermost-plugin-pomodoro/server/model"
 	model2 "github.com/mattermost/mattermost-server/v5/model"
 	"github.com/pkg/errors"

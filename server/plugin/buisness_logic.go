@@ -3,10 +3,11 @@ package plugin
 import (
 	"encoding/json"
 	"fmt"
+	"time"
+
 	model2 "github.com/mattermost/mattermost-plugin-pomodoro/server/model"
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/pkg/errors"
-	"time"
 )
 
 const (

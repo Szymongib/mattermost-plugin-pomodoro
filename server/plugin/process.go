@@ -1,9 +1,10 @@
 package plugin
 
 import (
+	"strings"
+
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/pkg/errors"
-	"strings"
 )
 
 const (
@@ -41,7 +42,6 @@ func (p *Plugin) finalizeSession(userID string) error {
 	// TODO: possibly set to previous status or one defined in config
 	_, appErr := p.API.UpdateUserStatus(userID, model.STATUS_ONLINE)
 	if appErr != nil {
-		//p.API.LogWarn("Failed to set user status to 'online'", "error", err)
 		return errors.Wrap(err, "failed to set user status to 'online'")
 	}
 

@@ -59,7 +59,6 @@ func (p *Plugin) postCommandResponse(args *model.CommandArgs, text string) {
 func getAutocompleteData(config *configuration) *model.AutocompleteData {
 	pomodoro := model.NewAutocompleteData("pomodoro", "[command]", "Available commands: start, list")
 
-	// TODO: support time passes as: 600s / 10m / 1h etc.
 	start := model.NewAutocompleteData("start", "[session_time]", "Start Pomodoro session with specified length")
 	pomodoro.AddCommand(start)
 

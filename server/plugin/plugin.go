@@ -67,6 +67,7 @@ func NewPlugin() *Plugin {
 	p.CommandHandlers = map[string]CommandHandleFunc{
 		"start": p.cmdStartSession,
 		"list":  p.cmdListSessions,
+		// TODO: check current session command
 	}
 
 	return p

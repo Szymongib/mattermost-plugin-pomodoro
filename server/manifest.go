@@ -13,8 +13,8 @@ var manifest *model.Manifest
 const manifestStr = `
 {
   "id": "com.mattermost.plugin-pomodoro",
-  "name": "Plugin Pomodoro",
-  "description": "Run your pomodoro sessions using Mattermost",
+  "name": "Pomodoro Plugin",
+  "description": "Run your pomodoro sessions using Mattermost.",
   "version": "0.1.0",
   "min_server_version": "5.12.0",
   "server": {

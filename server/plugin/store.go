@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mattermost/mattermost-plugin-pomodoro/server/model"
 	model2 "github.com/mattermost/mattermost-server/v5/model"
 	"github.com/pkg/errors"
 )
@@ -16,7 +15,7 @@ const (
 	// TODO: session lock as separate key with expiry
 )
 
-func (p *Plugin) SaveFinishedSession(userID string, session model.Session) error {
+func (p *Plugin) SaveFinishedSession(userID string, session Session) error {
 	userSessions, err := p.GetUserSessions(userID)
 	if err != nil {
 		return errors.Wrap(err, "failed to list sessions")
@@ -41,7 +40,7 @@ func (p *Plugin) SaveFinishedSession(userID string, session model.Session) error
 	return nil
 }
 
-func sessionExists(sessions model.UserSessions, id string) bool {
+func sessionExists(sessions UserSessions, id string) bool {
 	for _, s := range sessions.Items {
 		if s.SessionID == id {
 			return true
@@ -50,40 +49,40 @@ func sessionExists(sessions model.UserSessions, id string) bool {
 	return false
 }
 
-func (p *Plugin) GetUserSessions(userID string) (model.UserSessions, error) {
+func (p *Plugin) GetUserSessions(userID string) (UserSessions, error) {
 	userSessionsRaw, appErr := p.API.KVGet(userID + userSessionsKey)
 	if appErr != nil {
-		return model.UserSessions{}, errors.Wrap(appErr, "failed to get user sessions")
+		return UserSessions{}, errors.Wrap(appErr, "failed to get user sessions")
 	}
 
 	// No session - return empty list
 	if userSessionsRaw == nil {
-		return model.UserSessions{Items: []model.Session{}}, nil
+		return UserSessions{Items: []Session{}}, nil
 	}
 
-	var userSessions model.UserSessions
+	var userSessions UserSessions
 	err := json.Unmarshal(userSessionsRaw, &userSessions)
 	if err != nil {
-		return model.UserSessions{}, errors.Wrap(err, "failed to unmarshal user sessions")
+		return UserSessions{}, errors.Wrap(err, "failed to unmarshal user sessions")
 	}
 
 	return userSessions, nil
 }
 
-func (p *Plugin) GetActiveSession(userID string) (model.Session, error) {
+func (p *Plugin) GetActiveSession(userID string) (Session, error) {
 	sessionRaw, appErr := p.getActiveSession(userID)
 	if appErr != nil {
-		return model.Session{}, errors.Wrapf(appErr, "failed to query active session")
+		return Session{}, errors.Wrapf(appErr, "failed to query active session")
 	}
 
 	if sessionRaw == nil {
-		return model.Session{}, fmt.Errorf("session not found for the user")
+		return Session{}, fmt.Errorf("session not found for the user")
 	}
 
-	var session model.Session
+	var session Session
 	err := json.Unmarshal(sessionRaw, &session)
 	if err != nil {
-		return model.Session{}, errors.Wrapf(err, "failed to unmarshall active session")
+		return Session{}, errors.Wrapf(err, "failed to unmarshall active session")
 	}
 
 	return session, nil

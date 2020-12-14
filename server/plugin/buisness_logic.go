@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	model2 "github.com/mattermost/mattermost-plugin-pomodoro/server/model"
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/pkg/errors"
 )
@@ -41,7 +40,7 @@ func (p *Plugin) startWorkSession(userID string, sessionLength time.Duration) (t
 	}
 
 	startTime := time.Now()
-	session := model2.Session{
+	session := Session{
 		SessionID: model.NewId(),
 		UserID:    userID,
 		StartTime: startTime.Unix(),

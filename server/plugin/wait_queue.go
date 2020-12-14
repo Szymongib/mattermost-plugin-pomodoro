@@ -1,11 +1,7 @@
 package plugin
 
-import (
-	"github.com/mattermost/mattermost-plugin-pomodoro/server/model"
-)
-
 type delayedSession struct {
-	session *model.Session
+	session *Session
 	readyAt int64
 	index   int
 }

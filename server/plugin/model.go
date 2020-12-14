@@ -1,4 +1,4 @@
-package model
+package plugin
 
 type UserSessions struct {
 	Items []Session `json:"items"`

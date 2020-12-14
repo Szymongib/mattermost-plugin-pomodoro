@@ -5,14 +5,13 @@ import (
 	"context"
 	"time"
 
-	"github.com/mattermost/mattermost-plugin-pomodoro/server/model"
 	"github.com/pkg/errors"
 )
 
-var tickTime = 5 * time.Second
+var tickTime = 10 * time.Second
 
 func (p *Plugin) NewWorkQueue(workers int) *SessionQueue {
-	sessionChan := make(chan *model.Session)
+	sessionChan := make(chan *Session)
 	ctx, cancel := context.WithCancel(context.Background())
 	waitChan := make(chan *delayedSession)
 
@@ -27,6 +26,7 @@ func (p *Plugin) NewWorkQueue(workers int) *SessionQueue {
 		workersCount:   workers,
 		sessionChannel: sessionChan,
 		waitChan:       waitChan,
+		p:              p,
 	}
 
 	go queue.runWaitLoop()
@@ -41,20 +41,22 @@ type SessionQueue struct {
 	heartbeat *time.Ticker
 
 	workersCount   int
-	sessionChannel chan *model.Session // TODO: consider enqueuing user ids instead, as one user can have only one active session
+	sessionChannel chan *Session // TODO: consider enqueuing user ids instead, as one user can have only one active session
 
 	waitChan chan *delayedSession
+
+	p *Plugin
 }
 
 func (q *SessionQueue) Cancel() {
 	q.ctxCancel()
 }
 
-func (q *SessionQueue) Add(session *model.Session) {
+func (q *SessionQueue) Add(session *Session) {
 	q.sessionChannel <- session
 }
 
-func (p *Plugin) worker(ctx context.Context, sessionChan <-chan *model.Session, waitChan chan<- *delayedSession) {
+func (p *Plugin) worker(ctx context.Context, sessionChan <-chan *Session, waitChan chan<- *delayedSession) {
 	for {
 		select {
 		case <-ctx.Done():
@@ -77,7 +79,7 @@ func (p *Plugin) worker(ctx context.Context, sessionChan <-chan *model.Session, 
 	}
 }
 
-func (p *Plugin) processSession(session *model.Session) (bool, error) {
+func (p *Plugin) processSession(session *Session) (bool, error) {
 	endTime := session.StartTime + session.Length
 
 	if time.Now().Unix() < endTime {
@@ -121,7 +123,7 @@ func (q *SessionQueue) runWaitLoop() {
 			}
 
 			entry := queue.Peek().(*delayedSession)
-			nextItemChannel = time.NewTimer(time.Duration(now-entry.readyAt) * time.Second)
+			nextItemChannel = time.NewTimer(time.Duration(entry.readyAt-now) * time.Second)
 			nextReadyAt = nextItemChannel.C
 		}
 

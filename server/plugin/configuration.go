@@ -29,7 +29,6 @@ func (c *configuration) Clone() *configuration {
 
 // IsValid checks if all needed fields are set.
 func (c *configuration) IsValid() error {
-
 	// TODO: config checks
 
 	return nil

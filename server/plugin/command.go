@@ -32,11 +32,9 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 	p.postCommandResponse(args, fmt.Sprintf("Unknown action %v", action))
 	return &model.CommandResponse{}, nil
-
 }
 
 func (p *Plugin) getCommand(config *configuration) (*model.Command, error) {
-
 	return &model.Command{
 		Trigger:          "pomodoro",
 		AutoComplete:     true,

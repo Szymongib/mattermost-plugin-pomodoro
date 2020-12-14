@@ -32,9 +32,9 @@ func (p *Plugin) SaveFinishedSession(userID string, session Session) error {
 		return errors.Wrap(err, "failed to marshal user sessions")
 	}
 
-	err = p.API.KVSet(userID+userSessionsKey, data)
-	if err != nil {
-		return errors.Wrap(err, "failed to store user sessions")
+	appErr := p.API.KVSet(userID+userSessionsKey, data)
+	if appErr != nil {
+		return errors.Wrap(appErr, "failed to store user sessions")
 	}
 
 	return nil
@@ -116,7 +116,7 @@ func (p *Plugin) ListAllKeys() ([]string, error) {
 		if len(keyBatch) < batchSize {
 			break
 		}
-		offset += 1
+		offset++
 	}
 
 	return keys, nil

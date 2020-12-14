@@ -19,7 +19,7 @@ var (
 	sessionInProgress = "Failed to start session: session for user already in progress"
 )
 
-func (p *Plugin) startWorkSession(userID string, sessionLength time.Duration) (time.Time, *PluginError) {
+func (p *Plugin) startWorkSession(userID string, sessionLength time.Duration) (time.Time, *Error) {
 	if sessionLength < minSessionLength || sessionLength > maxSessionLength {
 		return time.Time{}, Err(fmt.Errorf(invalidSessionLen), invalidSessionLen)
 	}
